@@ -1,2 +1,2 @@
 # BattleShipGame
-C++ implementation of battleship game
+Implementation of BattleShip Game
