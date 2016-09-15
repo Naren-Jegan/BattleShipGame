@@ -5,10 +5,8 @@
 #include <ctime>
 #include <fstream>
 using namespace std;
-<<<<<<< HEAD
 #include "Bot.h"
-=======
->>>>>>> origin/master
+
 struct Detail{
     int startRow;
     int startColumn;

@@ -1,9 +1,5 @@
 #include "Controller.h"
-<<<<<<< HEAD
-=======
-#include "ComputerBot.cpp"
-#include "UserBot.cpp"
->>>>>>> origin/master
+
 vector<Detail> userdetails,compdetails;
 vector<Move> moves;
 void writeToJSON(string winner){

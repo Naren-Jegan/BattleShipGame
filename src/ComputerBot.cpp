@@ -11,7 +11,6 @@ class ComputerBot: public Bot{
         int x = rand()%GameConfig::ROWS;
         int y = rand()%GameConfig::COLUMNS;
         return Block(x,y);
-<<<<<<< HEAD
     }
 	Boat* positionBoats(Boat boats[]) {
         for(int i = 0; i<GameConfig::NBOATS;i++){
@@ -20,16 +19,3 @@ class ComputerBot: public Bot{
         return boats;
     }
 };
-=======
-    }
-	Boat* positionBoats(Boat boats[]) {
-        for(int i = 0; i<GameConfig::NBOATS;i++){
-            //set boat blocks
-        }
-        return boats;
-    }
-
-};
-
-
->>>>>>> origin/master
