@@ -1,5 +1,4 @@
 #include "Controller.h"
-
 vector<Detail> userdetails,compdetails;
 vector<Move> moves;
 void writeToJSON(string winner){
@@ -146,7 +145,10 @@ void Controller::start(){
 
     Boat userBoats[GameConfig::NBOATS];
     initialBoatArrangement(userBoats);
-    userBot->positionBoats(userBoats);
+    Boat tempBoats[GameConfig::NBOATS] = userBoats;
+    userBot->positionBoats(tempBoats);
+    for(int i = 0; i < GameConfig::NBOATS; i++)
+        userBoats[i] = tempBoats[i];
 
     if(validateBoatPosition(userBoats)){
         userBoard->placeBoats(userBoats);
@@ -166,7 +168,11 @@ void Controller::start(){
     }
     Boat computerBoats[GameConfig::NBOATS];
     initialBoatArrangement(computerBoats);
-    computerBot->positionBoats(computerBoats);
+    Boat temp1Boats[GameConfig::NBOATS] = computerBoats;
+    computerBot->positionBoats(temp1Boats);
+    for(int i = 0; i < GameConfig::NBOATS; i++)
+        computerBoats[i] = temp1Boats[i];
+
     if(validateBoatPosition(computerBoats)){
         computerBoard->placeBoats(computerBoats);
         Detail detail;
