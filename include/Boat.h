@@ -12,12 +12,7 @@ private:
     friend class Board;
     friend class Controller;
     Boat(){};
-	void setBoat(GameConfig::BoatType type, Block startBlock, Block endBlock) {
-		this->type = type;
-		this->startBlock = startBlock;
-		this->endBlock = endBlock;
-	}
-
+	
 	int getBoatSizeBlock(){
 		if(this->startBlock.getX() == this->endBlock.getX()){
 			return int(abs(double(this->startBlock.getY() - this->endBlock.getY()))) + 1;
@@ -66,6 +61,12 @@ public:
 
 	Block getEndBlock(){
 		return endBlock;
+	}
+	
+	void setBoat(GameConfig::BoatType type, Block startBlock, Block endBlock) {
+		this->type = type;
+		this->startBlock = startBlock;
+		this->endBlock = endBlock;
 	}
 
 	void setStartBlock(Block startBlock) {
