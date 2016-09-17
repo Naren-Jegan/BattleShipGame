@@ -241,8 +241,13 @@ void Controller::makeMove(Board *userBoard, Board *computerBoard) {
     if(currentTurn == GameConfig::USERBOT){
 
         Block block = userBot->makeMove(computerBoard->getLastMoveStatus(), computerBoard->getAllBoatsStatus());
-
-        GameConfig::MoveStatus hit = computerBoard->dropBombOnBlock(block);
+        GameConfig::MoveStatus hit;
+        if(block.getX() < 0 || block.getX() > 9 || block.getY() < 0 || block.getY() > 9){
+            hit = GameConfig::INVALID;
+        }
+        else{
+            hit = computerBoard->dropBombOnBlock(block);
+        }
 
         if(hit != GameConfig::HIT){ // if a boat has been hit, the bot gets one more turn, else turn goes to the opponent
             currentTurn = GameConfig::COMPUTERBOT;
@@ -260,7 +265,13 @@ void Controller::makeMove(Board *userBoard, Board *computerBoard) {
     else if(currentTurn == GameConfig::COMPUTERBOT){
 
         Block block = computerBot->makeMove(userBoard->getLastMoveStatus(), userBoard->getAllBoatsStatus());
-        GameConfig::MoveStatus hit = userBoard->dropBombOnBlock(block);
+        GameConfig::MoveStatus hit;
+        if(block.getX() < 0 || block.getX() > 9 || block.getY() < 0 || block.getY() > 9){
+            hit = GameConfig::INVALID;
+        }
+        else{
+            hit = userBoard->dropBombOnBlock(block);
+        }
 
         if(hit != GameConfig::HIT){ // if a boat has been hit, the bot gets one more turn, else turn goes to the opponent
             currentTurn = GameConfig::USERBOT;
