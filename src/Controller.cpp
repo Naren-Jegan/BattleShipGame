@@ -235,12 +235,7 @@ int Controller::declareWinner(Board *userBoard, Board *computerBoard){
  */
 void Controller::play(Board *userBoard, Board *computerBoard) {
     while(true){
-        try{
-            makeMove(userBoard, computerBoard);
-        }
-        catch(ArrayIndexOutOfCoundsException e){
-            cout << e.what() << endl;
-        }
+        makeMove(userBoard, computerBoard);
         if(userBoard->isAllBoatsBlasted() || computerBoard->isAllBoatsBlasted()){
             break;
         }
@@ -254,11 +249,17 @@ void Controller::makeMove(Board *userBoard, Board *computerBoard) {
 
         Block block = userBot->makeMove(computerBoard->getLastMoveStatus(), computerBoard->getAllBoatsStatus());
         GameConfig::MoveStatus hit;
-        if(block.getX() < 0 || block.getX() > 9 || block.getY() < 0 || block.getY() > 9){
-            throw ArrayIndexOutOfCoundsException();
+        try{
+            if(block.getX() < 0 || block.getX() > 9 || block.getY() < 0 || block.getY() > 9){
+                throw ArrayIndexOutOfCoundsException();
+            }
+            else{
+                hit = computerBoard->dropBombOnBlock(block);
+            }
         }
-        else{
-            hit = computerBoard->dropBombOnBlock(block);
+        catch(ArrayIndexOutOfCoundsException e){
+            cout << e.what() << " UserBot" << endl;
+            throw   ArrayIndexOutOfCoundsException();
         }
         if(hit != GameConfig::HIT){ // if a boat has been hit, the bot gets one more turn, else turn goes to the opponent
             currentTurn = GameConfig::COMPUTERBOT;
@@ -277,11 +278,17 @@ void Controller::makeMove(Board *userBoard, Board *computerBoard) {
 
         Block block = computerBot->makeMove(userBoard->getLastMoveStatus(), userBoard->getAllBoatsStatus());
         GameConfig::MoveStatus hit;
-        if(block.getX() < 0 || block.getX() > 9 || block.getY() < 0 || block.getY() > 9){
-            throw ArrayIndexOutOfCoundsException();
+        try{
+            if(block.getX() < 0 || block.getX() > 9 || block.getY() < 0 || block.getY() > 9){
+                throw ArrayIndexOutOfCoundsException();
+            }
+            else{
+                hit = userBoard->dropBombOnBlock(block);
+            }
         }
-        else{
-            hit = computerBoard->dropBombOnBlock(block);
+        catch(ArrayIndexOutOfCoundsException e){
+            cout << e.what() << " ComputerBot" << endl;
+            throw   ArrayIndexOutOfCoundsException();
         }
 
         if(hit != GameConfig::HIT){ // if a boat has been hit, the bot gets one more turn, else turn goes to the opponent
