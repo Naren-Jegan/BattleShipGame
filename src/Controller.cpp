@@ -1,4 +1,12 @@
+#include <exception>
+using namespace std;
 #include "Controller.h"
+class ArrayIndexOutOfCoundsException : public exception{
+    public:
+    const char * what() const throw(){
+        return "Array index out of bounds";
+    }
+};
 vector<Detail> userdetails,compdetails;
 vector<Move> moves;
 void writeToJSON(string winner){
@@ -227,11 +235,15 @@ int Controller::declareWinner(Board *userBoard, Board *computerBoard){
  */
 void Controller::play(Board *userBoard, Board *computerBoard) {
     while(true){
-        makeMove(userBoard, computerBoard);
+        try{
+            makeMove(userBoard, computerBoard);
+        }
+        catch(ArrayIndexOutOfCoundsException e){
+            cout << e.what() << endl;
+        }
         if(userBoard->isAllBoatsBlasted() || computerBoard->isAllBoatsBlasted()){
             break;
         }
-
     }
 
 }
@@ -243,12 +255,11 @@ void Controller::makeMove(Board *userBoard, Board *computerBoard) {
         Block block = userBot->makeMove(computerBoard->getLastMoveStatus(), computerBoard->getAllBoatsStatus());
         GameConfig::MoveStatus hit;
         if(block.getX() < 0 || block.getX() > 9 || block.getY() < 0 || block.getY() > 9){
-            hit = GameConfig::INVALID;
+            throw ArrayIndexOutOfCoundsException();
         }
         else{
             hit = computerBoard->dropBombOnBlock(block);
         }
-
         if(hit != GameConfig::HIT){ // if a boat has been hit, the bot gets one more turn, else turn goes to the opponent
             currentTurn = GameConfig::COMPUTERBOT;
         }
@@ -267,10 +278,10 @@ void Controller::makeMove(Board *userBoard, Board *computerBoard) {
         Block block = computerBot->makeMove(userBoard->getLastMoveStatus(), userBoard->getAllBoatsStatus());
         GameConfig::MoveStatus hit;
         if(block.getX() < 0 || block.getX() > 9 || block.getY() < 0 || block.getY() > 9){
-            hit = GameConfig::INVALID;
+            throw ArrayIndexOutOfCoundsException();
         }
         else{
-            hit = userBoard->dropBombOnBlock(block);
+            hit = computerBoard->dropBombOnBlock(block);
         }
 
         if(hit != GameConfig::HIT){ // if a boat has been hit, the bot gets one more turn, else turn goes to the opponent
