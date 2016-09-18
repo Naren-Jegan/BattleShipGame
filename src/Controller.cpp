@@ -1,20 +1,12 @@
 #include <exception>
 using namespace std;
 #include "Controller.h"
-class ArrayIndexOutOfBoundsException : public exception{
+class ArrayIndexOutOfCoundsException : public exception{
     public:
     const char * what() const throw(){
         return "Array index out of bounds";
     }
 };
-
-class InvalidMoveException : public exception{
-    public:
-    const char * what() const throw(){
-        return "Invalid move";
-    }
-};
-
 vector<Detail> userdetails,compdetails;
 vector<Move> moves;
 void writeToJSON(string winner){
@@ -259,35 +251,26 @@ void Controller::makeMove(Board *userBoard, Board *computerBoard) {
         GameConfig::MoveStatus hit;
         try{
             if(block.getX() < 0 || block.getX() > 9 || block.getY() < 0 || block.getY() > 9){
-                throw ArrayIndexOutOfBoundsException();
+                throw ArrayIndexOutOfCoundsException();
             }
             else{
                 hit = computerBoard->dropBombOnBlock(block);
             }
         }
-        catch(ArrayIndexOutOfBoundsException e){
+        catch(ArrayIndexOutOfCoundsException e){
             cout << e.what() << " UserBot" << endl;
-            throw   ArrayIndexOutOfBoundsException();
+            throw   ArrayIndexOutOfCoundsException();
         }
         if(hit != GameConfig::HIT){ // if a boat has been hit, the bot gets one more turn, else turn goes to the opponent
             currentTurn = GameConfig::COMPUTERBOT;
         }
-        try{
-            if(hit != GameConfig::INVALID){
-                Move move;
-                move.player = "UserBot";
-                move.row = block.getX();
-                move.column = block.getY();
-                move.hit = ((hit == GameConfig::HIT) ? "true" : "false");
-                moves.push_back(move);
-            }
-            else{
-                throw InvalidMoveException();
-            }
-        }
-        catch(InvalidMoveException I){
-            cout << I.what() << " UserBot" << endl;
-            throw InvalidMoveException();
+        if(hit != GameConfig::INVALID){
+            Move move;
+            move.player = "UserBot";
+            move.row = block.getX();
+            move.column = block.getY();
+            move.hit = ((hit == GameConfig::HIT) ? "true" : "false");
+            moves.push_back(move);
         }
 
     }
@@ -297,36 +280,27 @@ void Controller::makeMove(Board *userBoard, Board *computerBoard) {
         GameConfig::MoveStatus hit;
         try{
             if(block.getX() < 0 || block.getX() > 9 || block.getY() < 0 || block.getY() > 9){
-                throw ArrayIndexOutOfBoundsException();
+                throw ArrayIndexOutOfCoundsException();
             }
             else{
                 hit = userBoard->dropBombOnBlock(block);
             }
         }
-        catch(ArrayIndexOutOfBoundsException e){
+        catch(ArrayIndexOutOfCoundsException e){
             cout << e.what() << " ComputerBot" << endl;
-            throw   ArrayIndexOutOfBoundsException();
+            throw   ArrayIndexOutOfCoundsException();
         }
 
         if(hit != GameConfig::HIT){ // if a boat has been hit, the bot gets one more turn, else turn goes to the opponent
             currentTurn = GameConfig::USERBOT;
         }
-        try{
-            if(hit != GameConfig::INVALID){
-                Move move;
-                move.player = "ComputerBot";
-                move.row = block.getX();
-                move.column = block.getY();
-                move.hit = ((hit == GameConfig::HIT) ? "true" : "false");
-                moves.push_back(move);
-            }
-            else{
-                throw InvalidMoveException();
-            }
-        }
-        catch(InvalidMoveException I){
-            cout << I.what() << " ComputerBot" << endl;
-            throw InvalidMoveException();
+        if(hit != GameConfig::INVALID){
+            Move move;
+            move.player = "ComputerBot";
+            move.row = block.getX();
+            move.column = block.getY();
+            move.hit = ((hit == GameConfig::HIT) ? "true" : "false");
+            moves.push_back(move);
         }
     }
 }
