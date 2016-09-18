@@ -1,12 +1,19 @@
 #include <exception>
 using namespace std;
 #include "Controller.h"
-class ArrayIndexOutOfCoundsException : public exception{
+class ArrayIndexOutOfBoundsException : public exception{
     public:
     const char * what() const throw(){
         return "Array index out of bounds";
     }
 };
+class InvalidBoatPositionException : public exception{
+    public:
+    const char * what() const throw(){
+        return "Invalid boat position";
+    }
+};
+
 vector<Detail> userdetails,compdetails;
 vector<Move> moves;
 void writeToJSON(string winner){
@@ -172,7 +179,8 @@ void Controller::start(){
     }
     else {
         //cout << "not valid positioning" << endl;
-        return;
+		throw InvalidBoatPositionException();
+        
     }
     Boat computerBoats[GameConfig::NBOATS];
     initialBoatArrangement(computerBoats);
@@ -195,7 +203,8 @@ void Controller::start(){
     }
     else {
         //cout << "Not valid positioning" << endl;
-        return;
+        throw InvalidBoatPositionException();
+        
     }
     srand(time(NULL));
     int x = rand()%2;
@@ -251,15 +260,15 @@ void Controller::makeMove(Board *userBoard, Board *computerBoard) {
         GameConfig::MoveStatus hit;
         try{
             if(block.getX() < 0 || block.getX() > 9 || block.getY() < 0 || block.getY() > 9){
-                throw ArrayIndexOutOfCoundsException();
+                throw ArrayIndexOutOfBoundsException();
             }
             else{
                 hit = computerBoard->dropBombOnBlock(block);
             }
         }
-        catch(ArrayIndexOutOfCoundsException e){
+        catch(ArrayIndexOutOfBoundsException e){
             cout << e.what() << " UserBot" << endl;
-            throw   ArrayIndexOutOfCoundsException();
+            throw   ArrayIndexOutOfBoundsException();
         }
         if(hit != GameConfig::HIT){ // if a boat has been hit, the bot gets one more turn, else turn goes to the opponent
             currentTurn = GameConfig::COMPUTERBOT;
@@ -280,15 +289,15 @@ void Controller::makeMove(Board *userBoard, Board *computerBoard) {
         GameConfig::MoveStatus hit;
         try{
             if(block.getX() < 0 || block.getX() > 9 || block.getY() < 0 || block.getY() > 9){
-                throw ArrayIndexOutOfCoundsException();
+                throw ArrayIndexOutOfBoundsException();
             }
             else{
                 hit = userBoard->dropBombOnBlock(block);
             }
         }
-        catch(ArrayIndexOutOfCoundsException e){
+        catch(ArrayIndexOutOfBoundsException e){
             cout << e.what() << " ComputerBot" << endl;
-            throw   ArrayIndexOutOfCoundsException();
+            throw   ArrayIndexOutOfBoundsException();
         }
 
         if(hit != GameConfig::HIT){ // if a boat has been hit, the bot gets one more turn, else turn goes to the opponent
