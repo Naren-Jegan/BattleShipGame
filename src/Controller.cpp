@@ -160,7 +160,9 @@ void Controller::start(){
 
     Boat userBoats[GameConfig::NBOATS];
     initialBoatArrangement(userBoats);
-    Boat tempBoats[GameConfig::NBOATS] = userBoats;
+    Boat tempBoats[GameConfig::NBOATS];
+    for(int i = 0; i < GameConfig::NBOATS; i++)
+        tempBoats[i] = userBoats[i];
     userBot->positionBoats(tempBoats);
     for(int i = 0; i < GameConfig::NBOATS; i++)
         userBoats[i] = tempBoats[i];
@@ -180,14 +182,15 @@ void Controller::start(){
     else {
         //cout << "not valid positioning" << endl;
 		throw InvalidBoatPositionException();
-        
+
     }
     Boat computerBoats[GameConfig::NBOATS];
     initialBoatArrangement(computerBoats);
-    Boat temp1Boats[GameConfig::NBOATS] = computerBoats;
-    computerBot->positionBoats(temp1Boats);
     for(int i = 0; i < GameConfig::NBOATS; i++)
-        computerBoats[i] = temp1Boats[i];
+        tempBoats[i] = computerBoats[i];
+    computerBot->positionBoats(tempBoats);
+    for(int i = 0; i < GameConfig::NBOATS; i++)
+        computerBoats[i] = tempBoats[i];
 
     if(validateBoatPosition(computerBoats)){
         computerBoard->placeBoats(computerBoats);
@@ -204,7 +207,7 @@ void Controller::start(){
     else {
         //cout << "Not valid positioning" << endl;
         throw InvalidBoatPositionException();
-        
+
     }
     srand(time(NULL));
     int x = rand()%2;
@@ -249,7 +252,6 @@ void Controller::play(Board *userBoard, Board *computerBoard) {
             break;
         }
     }
-
 }
 
 void Controller::makeMove(Board *userBoard, Board *computerBoard) {
